@@ -81,7 +81,6 @@ export default {
     headers: {
       common: {
         Accept: 'application/json, text/plain, */*',
-        'As-Tagd-Actor': 'Retailer',
       },
     },
   },

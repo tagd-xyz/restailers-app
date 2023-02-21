@@ -48,23 +48,20 @@ export default {
     items() {
       return this.$store.state.items.data;
     },
+    actor() {
+      return this.$store.state.actor;
+    },
   },
   watch: {
-    // currentRetailer(after, before) {
-    //   this.isBusy = true
-    //   this.fetch(after).then(() => {
-    //     this.isBusy = false
-    //   })
-    // },
-  },
-  mounted() {
-    // if (this.currentRetailer) {
-    this.isBusy = true;
     // eslint-disable-next-line no-unused-vars
-    this.fetch().then((res) => {
-      this.isBusy = false;
-    });
-    // }
+    actor(after, before) {
+      if (after) {
+        this.isBusy = true;
+        this.fetch().then(() => {
+          this.isBusy = false;
+        });
+      }
+    },
   },
   methods: {
     // eslint-disable-next-line no-unused-vars

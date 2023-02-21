@@ -4,5 +4,11 @@ export default function ({ $axios, store }) {
     if (token) {
       $axios.setToken(token, 'Bearer');
     }
+    $axios.onRequest(() => {
+      const actor = store.state.actor;
+      if (actor) {
+        $axios.setHeader('Tagd-Act-As', 'retailer:' + actor);
+      }
+    });
   }
 }

@@ -77,7 +77,7 @@ export default {
         name: this.form.name ?? '',
         description: this.form.desc ?? '',
         type: this.form.type ?? '',
-        consumerId: this.form.consumer ?? '',
+        consumer: this.form.consumer ?? '',
         transaction: this.form.transaction ?? '',
         properties: {
           brand: this.form.brand ?? '',
@@ -107,7 +107,7 @@ export default {
       this.add(this.payload)
         // eslint-disable-next-line no-unused-vars
         .then((res) => {
-          this.$router.push({ path: '/retailersDemo/items' });
+          this.$router.push({ path: '/items' });
         })
         .finally(() => {
           this.isBusy = false;
