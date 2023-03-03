@@ -7,15 +7,15 @@ export const useItemsStore = defineStore('items', {
     return {
       list: [],
       single: null,
-      isFetching: false,
-      isPosting: false,
-      isDeleting: false,
+      is: {
+        fetchingAll: false,
+        fetchingSingle: false,
+        adding: false,
+        deleting: false,
+      },
     };
   },
   getters: {
-    isLoading() {
-      return this.isFetching || this.isPosting || this.isDeleting;
-    },
     isEmpty() {
       return 0 == this.list.length;
     },
@@ -25,9 +25,9 @@ export const useItemsStore = defineStore('items', {
   },
   actions: {
     fetchAll() {
-      this.isFetching = true;
+      this.is.fetchingAll = true;
       api
-        .get('/api/v1/items')
+        .get('items')
         .then((response) => {
           this.list = response.data.data;
         })
@@ -35,13 +35,14 @@ export const useItemsStore = defineStore('items', {
           this.list = [];
         })
         .finally(() => {
-          this.isFetching = false;
+          this.is.fetchingAll = false;
         });
     },
     fetch(id) {
-      this.isFetching = true;
+      this.single = null;
+      this.is.fetchingSingle = true;
       api
-        .get('/api/v1/items/' + id)
+        .get('items/' + id)
         .then((response) => {
           this.single = response.data.data;
         })
@@ -49,14 +50,14 @@ export const useItemsStore = defineStore('items', {
           this.single = null;
         })
         .finally(() => {
-          this.isFetching = false;
+          this.is.fetchingSingle = false;
         });
     },
     add(payload) {
       return new Promise((resolve, reject) => {
-        this.isPosting = true;
+        this.is.posting = true;
         api
-          .post('/api/v1/items', payload)
+          .post('items', payload)
           .then((response) => {
             resolve(response);
           })
@@ -64,15 +65,15 @@ export const useItemsStore = defineStore('items', {
             reject(error);
           })
           .finally(() => {
-            this.isPosting = false;
+            this.is.posting = false;
           });
       });
     },
     delete(id) {
       return new Promise((resolve, reject) => {
-        this.isDeleting = true;
+        this.is.deleting = true;
         api
-          .delete('/api/v1/items/' + id)
+          .delete('items/' + id)
           .then(() => {
             resolve();
           })
@@ -80,7 +81,7 @@ export const useItemsStore = defineStore('items', {
             reject(error);
           })
           .finally(() => {
-            this.isDeleting = false;
+            this.is.deleting = false;
           });
       });
     },

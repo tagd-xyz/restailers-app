@@ -1,7 +1,7 @@
 <template>
   <q-table
     class="q-pa-lg"
-    :loading="isLoading"
+    :loading="isFetching"
     :rows="list"
     :columns="columns"
     row-key="name"
@@ -24,8 +24,8 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const store = useItemsStore();
 
-const isLoading = computed(() => {
-  return store.isLoading;
+const isFetching = computed(() => {
+  return store.is.fetchingAll;
 });
 
 const list = computed(() => {
@@ -44,7 +44,9 @@ function onRowClicked(evt, row) {
 }
 
 onMounted(() => {
-  store.fetchAll();
+  if (!isFetching.value) {
+    store.fetchAll();
+  }
 });
 
 const columns = [

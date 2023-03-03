@@ -2,7 +2,7 @@
   <div class="q-pa-lg">
     <p class="text-h5">
       Item {{ route.params.id }}
-      <q-spinner v-if="isLoading" color="black" />
+      <q-spinner v-if="isFetching" color="black" />
     </p>
     <div class="row q-col-gutter-lg">
       <div class="col">
@@ -10,6 +10,7 @@
           <q-card-section>
             <div class="text-h6">
               {{ item?.name }}
+              <q-spinner v-if="isFetching" color="black" />
             </div>
             <div class="text-subtitle2">
               sold by {{ item?.retailer ?? 'Unknown' }}
@@ -21,7 +22,10 @@
 
         <q-card>
           <q-card-section>
-            <div class="text-h6">Properties</div>
+            <div class="text-h6">
+              Properties
+              <q-spinner v-if="isFetching" color="black" />
+            </div>
             <div><strong>Type:</strong> {{ item?.type ?? 'Unknown' }}</div>
             <div>
               <strong>Brand:</strong> {{ item?.properties.brand ?? 'Unknown' }}
@@ -38,7 +42,11 @@
       <div class="col">
         <q-card>
           <q-card-section>
-            <div class="text-h6">Transaction ID</div>
+            <div class="text-h6">
+              Transaction
+              <q-spinner v-if="isFetching" color="black" />
+            </div>
+            <div class="text-subtitle2">ID xxx</div>
             <div class="text-subtitle2">sold to consumer A</div>
             <div class="text-subtitle2">
               on {{ date.formatDate(item?.createdAt, 'MMMM Do, YYYY H:m:s') }}
@@ -51,7 +59,7 @@
     <q-table
       class="q-my-lg"
       title="Tags"
-      :loading="isLoading"
+      :loading="isFetching"
       :rows="list"
       :columns="columns"
       row-key="id"
@@ -61,20 +69,13 @@
         page: 1,
         rowsPerPage: 50,
       }"
-    />
+    >
+    </q-table>
 
     <q-separator color="primary" class="q-my-md" />
 
     <div class="column items-end">
       <div class="col q-gutter-sm">
-        <q-btn
-          label="Confirm"
-          type="button"
-          color="primary"
-          :loading="isConfirming"
-          :disabled="!isConfirmEnabled"
-          @click="onConfirmClicked"
-        />
         <q-btn
           label="Delete"
           type="button"
@@ -102,20 +103,12 @@ const store = useItemsStore();
 
 const $q = useQuasar();
 
-const isLoading = computed(() => {
-  return store.isLoading;
-});
-
-const isConfirming = computed(() => {
-  return store.isDeleting;
+const isFetching = computed(() => {
+  return store.is.fetchingSingle;
 });
 
 const isDeleting = computed(() => {
   return store.isDeleting;
-});
-
-const isConfirmEnabled = computed(() => {
-  return true;
 });
 
 const isDeleteEnabled = computed(() => {
@@ -149,31 +142,49 @@ const columns = [
     format: (val) => date.formatDate(val, 'MMMM Do, YYYY H:m:s'),
     sortable: true,
   },
+  // {
+  //   name: 'isActive',
+  //   required: true,
+  //   label: 'Active',
+  //   align: 'left',
+  //   field: (row) => row.isActive,
+  //   format: (val) => (val ? 'Yes' : 'No'),
+  //   sortable: true,
+  // },
+  // {
+  //   name: 'isExpired',
+  //   required: true,
+  //   label: 'Expired',
+  //   align: 'left',
+  //   field: (row) => row.isExpired,
+  //   format: (val) => (val ? 'Yes' : 'No'),
+  //   sortable: true,
+  // },
+  // {
+  //   name: 'isTransferred',
+  //   required: true,
+  //   label: 'Transferred',
+  //   align: 'left',
+  //   field: (row) => row.isTransferred,
+  //   format: (val) => (val ? 'Yes' : 'No'),
+  //   sortable: true,
+  // },
   {
-    name: 'isActive',
+    name: 'consumer',
     required: true,
-    label: 'Active',
+    label: 'Consumer',
     align: 'left',
-    field: (row) => row.isActive,
-    format: (val) => (val ? 'Yes' : 'No'),
+    field: (row) => row,
+    format: (val) => val.consumer?.name ?? 'Unknown',
     sortable: true,
   },
   {
-    name: 'isExpired',
+    name: 'status',
     required: true,
-    label: 'Expired',
+    label: 'Status',
     align: 'left',
-    field: (row) => row.isExpired,
-    format: (val) => (val ? 'Yes' : 'No'),
-    sortable: true,
-  },
-  {
-    name: 'isTransferred',
-    required: true,
-    label: 'Transferred',
-    align: 'left',
-    field: (row) => row.isTransferred,
-    format: (val) => (val ? 'Yes' : 'No'),
+    field: (row) => row.status,
+    format: (val) => val.toUpperCase(),
     sortable: true,
   },
 ];
@@ -198,9 +209,5 @@ function onDeleteClicked() {
         message: 'There has been an error',
       });
     });
-}
-
-function onConfirmClicked() {
-  console.log('will confirm');
 }
 </script>

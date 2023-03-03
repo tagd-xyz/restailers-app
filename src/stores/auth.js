@@ -15,19 +15,12 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     signIn(user) {
-      console.log('setting user');
       this.user = user;
     },
     signOut() {
-      console.log('clear user');
       this.user = false;
     },
     setToken(token) {
-      if (token) {
-        console.log('setting token');
-      } else {
-        console.log('clear token');
-      }
       this.token = token;
     },
   },
