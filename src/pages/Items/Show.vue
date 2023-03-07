@@ -1,89 +1,74 @@
 <template>
   <div class="q-pa-lg">
     <p class="text-h5">
-      Item {{ route.params.id }}
+      Tagd ID {{ tagd?.slug }}
+      <q-badge outline color="primary" :label="tagd?.status" />
       <q-spinner v-if="isFetching" color="black" />
     </p>
-    <div class="row q-col-gutter-lg">
-      <div class="col">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">
-              {{ item?.name }}
-              <q-spinner v-if="isFetching" color="black" />
-            </div>
-            <div class="text-subtitle2">
-              sold by {{ item?.retailer ?? 'Unknown' }}
-            </div>
-            <q-separator class="q-my-md" />
-            <div class="text">{{ item?.description }}</div>
-          </q-card-section>
-        </q-card>
+    <div v-if="!isFetching">
+      <div class="row q-col-gutter-lg">
+        <div class="col">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">
+                {{ tagd?.item?.name }}
+              </div>
+              <div class="text-subtitle2">
+                sold by {{ tagd?.item?.retailer ?? 'Unknown' }}
+              </div>
+              <q-separator class="q-my-md" />
+              <div class="text">{{ tagd?.item?.description }}</div>
+            </q-card-section>
+          </q-card>
 
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">
-              Properties
-              <q-spinner v-if="isFetching" color="black" />
-            </div>
-            <div><strong>Type:</strong> {{ item?.type ?? 'Unknown' }}</div>
-            <div>
-              <strong>Brand:</strong> {{ item?.properties.brand ?? 'Unknown' }}
-            </div>
-            <div>
-              <strong>Model:</strong> {{ item?.properties.model ?? 'Unknown' }}
-            </div>
-            <div>
-              <strong>Size:</strong> {{ item?.properties.size ?? 'Unknown' }}
-            </div>
-          </q-card-section>
-        </q-card>
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Properties</div>
+              <div>
+                <strong>Type:</strong> {{ tagd?.item?.type ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Brand:</strong>
+                {{ tagd?.item?.properties.brand ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Model:</strong>
+                {{ tagd?.item?.properties.model ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Size:</strong>
+                {{ tagd?.item?.properties.size ?? 'Unknown' }}
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Transaction</div>
+              <div class="text-subtitle2">ID xxx</div>
+              <div class="text-subtitle2">sold to consumer A</div>
+              <div class="text-subtitle2">
+                on {{ date.formatDate(item?.createdAt, 'MMMM Do, YYYY H:m:s') }}
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
-      <div class="col">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">
-              Transaction
-              <q-spinner v-if="isFetching" color="black" />
-            </div>
-            <div class="text-subtitle2">ID xxx</div>
-            <div class="text-subtitle2">sold to consumer A</div>
-            <div class="text-subtitle2">
-              on {{ date.formatDate(item?.createdAt, 'MMMM Do, YYYY H:m:s') }}
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-    </div>
 
-    <q-table
-      class="q-my-lg"
-      title="Tags"
-      :loading="isFetching"
-      :rows="list"
-      :columns="columns"
-      row-key="id"
-      :pagination="{
-        sortBy: 'desc',
-        descending: false,
-        page: 1,
-        rowsPerPage: 50,
-      }"
-    >
-    </q-table>
+      <q-separator class="q-my-md" />
 
-    <q-separator color="primary" class="q-my-md" />
-
-    <div class="column items-end">
-      <div class="col q-gutter-sm">
-        <q-btn
-          label="Delete"
-          type="button"
-          color="negative"
-          :loading="isDeleting"
-          :disabled="!isDeleteEnabled"
-          @click="onDeleteClicked"
-        />
+      <div class="column items-end">
+        <div class="col q-gutter-sm">
+          <q-btn
+            label="Delete"
+            type="button"
+            color="negative"
+            :loading="isDeleting"
+            :disabled="!isDeleteEnabled"
+            @click="onDeleteClicked"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -91,6 +76,7 @@
 
 <script setup>
 import { computed, onMounted } from 'vue';
+import { useTagdStore } from 'stores/tagd';
 import { useItemsStore } from 'stores/items';
 import { useRoute, useRouter } from 'vue-router';
 import { date } from 'quasar';
@@ -99,103 +85,38 @@ import { useQuasar } from 'quasar';
 const router = useRouter();
 const route = useRoute();
 
-const store = useItemsStore();
+const store = useTagdStore();
+const storeItems = useItemsStore();
 
 const $q = useQuasar();
 
+const tagdId = computed(() => {
+  return route.params.id;
+});
+
 const isFetching = computed(() => {
-  return store.is.fetchingSingle;
+  return store.is.fetching;
 });
 
 const isDeleting = computed(() => {
-  return store.isDeleting;
+  return store.is.deleting;
 });
 
 const isDeleteEnabled = computed(() => {
-  return true;
+  return tagd.value?.status == 'inactive';
 });
 
-const item = computed(() => {
-  return store.single;
+const tagd = computed(() => {
+  return store.data;
 });
-
-const list = computed(() => {
-  return store.single?.tagds ?? [];
-});
-
-const columns = [
-  {
-    name: 'slug',
-    required: true,
-    label: 'ID',
-    align: 'left',
-    field: (row) => row.slug,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: 'createdAt',
-    required: true,
-    label: 'Created at',
-    align: 'left',
-    field: (row) => row.createdAt,
-    format: (val) => date.formatDate(val, 'MMMM Do, YYYY H:m:s'),
-    sortable: true,
-  },
-  // {
-  //   name: 'isActive',
-  //   required: true,
-  //   label: 'Active',
-  //   align: 'left',
-  //   field: (row) => row.isActive,
-  //   format: (val) => (val ? 'Yes' : 'No'),
-  //   sortable: true,
-  // },
-  // {
-  //   name: 'isExpired',
-  //   required: true,
-  //   label: 'Expired',
-  //   align: 'left',
-  //   field: (row) => row.isExpired,
-  //   format: (val) => (val ? 'Yes' : 'No'),
-  //   sortable: true,
-  // },
-  // {
-  //   name: 'isTransferred',
-  //   required: true,
-  //   label: 'Transferred',
-  //   align: 'left',
-  //   field: (row) => row.isTransferred,
-  //   format: (val) => (val ? 'Yes' : 'No'),
-  //   sortable: true,
-  // },
-  {
-    name: 'consumer',
-    required: true,
-    label: 'Consumer',
-    align: 'left',
-    field: (row) => row,
-    format: (val) => val.consumer?.name ?? 'Unknown',
-    sortable: true,
-  },
-  {
-    name: 'status',
-    required: true,
-    label: 'Status',
-    align: 'left',
-    field: (row) => row.status,
-    format: (val) => val.toUpperCase(),
-    sortable: true,
-  },
-];
 
 onMounted(() => {
-  store.fetch(route.params.id);
+  store.fetch(tagdId.value);
 });
 
 function onDeleteClicked() {
-  store
-    .delete(route.params.id)
+  storeItems
+    .delete(tagd.value.item.id)
     .then(() => {
       $q.notify({
         type: 'positive',

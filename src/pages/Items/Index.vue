@@ -1,7 +1,7 @@
 <template>
   <q-table
     class="q-pa-lg"
-    :loading="isFetching"
+    :loading="isLoading"
     :rows="list"
     :columns="columns"
     row-key="name"
@@ -18,14 +18,14 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { date } from 'quasar';
-import { useItemsStore } from 'stores/items';
+import { useTagdsStore } from 'stores/tagds';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const store = useItemsStore();
+const store = useTagdsStore();
 
-const isFetching = computed(() => {
-  return store.is.fetchingAll;
+const isLoading = computed(() => {
+  return store.is.fetching;
 });
 
 const list = computed(() => {
@@ -44,21 +44,12 @@ function onRowClicked(evt, row) {
 }
 
 onMounted(() => {
-  if (!isFetching.value) {
-    store.fetchAll();
+  if (!isLoading.value) {
+    store.fetch();
   }
 });
 
 const columns = [
-  {
-    name: 'retailer',
-    required: true,
-    label: 'Retailer',
-    align: 'left',
-    field: (row) => row.retailer,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
   {
     name: 'createdAt',
     required: true,
@@ -69,11 +60,38 @@ const columns = [
     sortable: true,
   },
   {
-    name: 'name',
+    name: 'status',
     required: true,
-    label: 'Name',
+    label: 'Status',
     align: 'left',
-    field: (row) => row.name,
+    field: (row) => row.status,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'tagdSlug',
+    required: true,
+    label: 'Tag ID',
+    align: 'left',
+    field: (row) => row.slug,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'item',
+    required: false,
+    label: 'Item',
+    align: 'left',
+    field: (row) => row.item.name,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'type',
+    required: false,
+    label: 'Type',
+    align: 'left',
+    field: (row) => row.item.type ?? 'Unknown',
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -82,7 +100,7 @@ const columns = [
     required: false,
     label: 'Brand',
     align: 'left',
-    field: (row) => row.properties.brand,
+    field: (row) => row.item.properties?.brand ?? 'Unknown',
     format: (val) => `${val}`,
     sortable: true,
   },
@@ -91,17 +109,17 @@ const columns = [
     required: false,
     label: 'Model',
     align: 'left',
-    field: (row) => row.properties.model,
+    field: (row) => row.item.properties?.model ?? 'Unknown',
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: 'description',
-    required: true,
-    label: 'Description',
+    name: 'size',
+    required: false,
+    label: 'Size',
     align: 'left',
-    field: (row) => row.description.substring(0, 50),
-    format: (val) => `${val}...`,
+    field: (row) => row.item.properties?.size ?? 'Unknown',
+    format: (val) => `${val}`,
     sortable: true,
   },
 ];
