@@ -78,6 +78,15 @@ const columns = [
     sortable: true,
   },
   {
+    name: 'retailer',
+    required: false,
+    label: 'Retailer',
+    align: 'left',
+    field: (row) => row.item.retailer,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
     name: 'item',
     required: false,
     label: 'Item',
