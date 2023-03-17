@@ -28,6 +28,11 @@ const routes = [
         path: 'items/add',
         component: () => import('src/pages/Items/Add.vue'),
       },
+      {
+        name: 'profileShow',
+        path: 'profile/:id',
+        component: () => import('src/pages/Profile/Show.vue'),
+      },
     ],
   },
 
