@@ -18,6 +18,8 @@ const store = useAuthStore();
 const router = useRouter();
 
 onMounted(() => {
+  console.info(process.env);
+
   const config = {
     signInOptions: [
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
