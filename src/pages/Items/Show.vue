@@ -46,10 +46,12 @@
           <q-card>
             <q-card-section>
               <div class="text-h6">Transaction</div>
-              <div class="text-subtitle2">ID xxx</div>
-              <div class="text-subtitle2">sold to consumer A</div>
+              <div class="text-subtitle2">ID {{ tagd?.meta?.transaction }}</div>
               <div class="text-subtitle2">
-                on {{ date.formatDate(item?.createdAt, 'MMMM Do, YYYY H:m:s') }}
+                sold to {{ tagd?.consumer?.email }} A
+              </div>
+              <div class="text-subtitle2">
+                on {{ date.formatDate(tagd?.createdAt, 'MMMM Do, YYYY H:m:s') }}
               </div>
             </q-card-section>
           </q-card>

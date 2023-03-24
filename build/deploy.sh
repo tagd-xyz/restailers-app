@@ -28,16 +28,8 @@ case ${ENV} in
 
     cloudfront_dist_id="CLOUDFRONT_DIST_ID_${ENV}"
     cloudfront_dist_id=${!cloudfront_dist_id}
-
-    api_url"API_URL_${ENV}"
-    api_url${!api_url}
-    export API_URL="${api_url}"
     ;;
 esac
-
-echo "--------------------------------------------------------------------------------------------"
-echo "API_URL: ${API_URL}"
-echo "--------------------------------------------------------------------------------------------"
 
 aws s3 sync --delete app/ s3://${s3_bucket}/
 if [[ $? != 0 ]]; then
