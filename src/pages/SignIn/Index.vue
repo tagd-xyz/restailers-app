@@ -1,6 +1,6 @@
 <template>
-  <q-page class="flex flex-center row">
-    <logo-component />
+  <q-page class="flex flex-center">
+    <logo-component height="75px" class="q-ma-lg" />
     <div id="firebaseui-auth-container"></div>
   </q-page>
 </template>
@@ -18,6 +18,8 @@ const store = useAuthStore();
 const router = useRouter();
 
 onMounted(() => {
+  console.info(process.env);
+
   const config = {
     signInOptions: [
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
