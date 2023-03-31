@@ -1,6 +1,9 @@
 <template>
   <q-page class="flex flex-center">
-    <logo-component height="75px" class="q-ma-lg" />
+    <div class="text-right">
+      <logo-component height="75px" class="q-ma-lg" />
+      <h4 class="q-mr-lg text-primary">Retailers Demo</h4>
+    </div>
     <div id="firebaseui-auth-container"></div>
   </q-page>
 </template>
