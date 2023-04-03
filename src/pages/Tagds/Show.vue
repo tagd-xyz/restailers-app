@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-lg">
     <p class="text-h5">
-      Tagd ID {{ tagd?.slug }}
+      Tag ID {{ tagd?.slug }}
       <q-badge outline color="primary" :label="tagd?.status" />
       <q-spinner v-if="isFetching" color="black" />
     </p>
@@ -87,8 +87,8 @@ import { useQuasar } from 'quasar';
 const router = useRouter();
 const route = useRoute();
 
-const store = useTagdStore();
-const storeItems = useItemsStore();
+const tagdStore = useTagdStore();
+const itemsStore = useItemsStore();
 
 const $q = useQuasar();
 
@@ -97,11 +97,11 @@ const tagdId = computed(() => {
 });
 
 const isFetching = computed(() => {
-  return store.is.fetching;
+  return tagdStore.is.fetching;
 });
 
 const isDeleting = computed(() => {
-  return store.is.deleting;
+  return tagdStore.is.deleting;
 });
 
 const isDeleteEnabled = computed(() => {
@@ -109,22 +109,22 @@ const isDeleteEnabled = computed(() => {
 });
 
 const tagd = computed(() => {
-  return store.data;
+  return tagdStore.data;
 });
 
 onMounted(() => {
-  store.fetch(tagdId.value);
+  tagdStore.fetch(tagdId.value);
 });
 
 function onDeleteClicked() {
-  storeItems
+  itemsStore
     .delete(tagd.value.item.id)
     .then(() => {
       $q.notify({
         type: 'positive',
         message: 'Item deleted successfully',
       });
-      router.push({ name: 'items' });
+      router.push({ name: 'tags' });
     })
     .catch(() => {
       $q.notify({

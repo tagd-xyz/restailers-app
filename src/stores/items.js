@@ -5,6 +5,7 @@ export const useItemsStore = defineStore('items', {
   persist: true,
   state: () => {
     return {
+      list: [],
       is: {
         posting: false,
         deleting: false,
@@ -34,11 +35,9 @@ export const useItemsStore = defineStore('items', {
         api
           .delete('items/' + itemId)
           .then((response) => {
-            this.list = response.data.data;
             resolve(response);
           })
           .catch((error) => {
-            this.list = [];
             reject(error);
           })
           .finally(() => {

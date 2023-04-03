@@ -7,26 +7,34 @@ const routes = [
     },
     children: [
       {
-        name: 'items',
-        path: 'items',
-        component: () => import('src/pages/Items/Index.vue'),
-        // children: [
-        //   {
-        //     name: 'add',
-        //     path: 'add',
-        //     component: () => import('src/pages/Items/Add.vue'),
-        //   },
-        // ],
+        name: 'tags',
+        path: 'tags',
+        component: () => import('src/pages/Tagds/Index.vue'),
       },
       {
-        name: 'itemsShow',
-        path: 'items/show/:id',
-        component: () => import('src/pages/Items/Show.vue'),
+        name: 'tagsShow',
+        path: 'tags/show/:id',
+        component: () => import('src/pages/Tagds/Show.vue'),
       },
       {
-        name: 'itemsAdd',
-        path: 'items/add',
-        component: () => import('src/pages/Items/Add.vue'),
+        name: 'tagsAdd',
+        path: 'tags/add',
+        component: () => import('src/pages/Tagds/Add.vue'),
+      },
+      {
+        name: 'stock',
+        path: 'stock',
+        component: () => import('src/pages/Stock/Index.vue'),
+      },
+      {
+        name: 'stockShow',
+        path: 'stock/show/:id',
+        component: () => import('src/pages/Stock/Show.vue'),
+      },
+      {
+        name: 'stockAdd',
+        path: 'stock/add',
+        component: () => import('src/pages/Stock/Add.vue'),
       },
       {
         name: 'profileShow',
