@@ -3,67 +3,18 @@
     <q-form @submit.prevent="onSubmit">
       <div class="row q-col-gutter-lg">
         <div class="col">
-          <p class="text-h5">Item details</p>
-          <q-input
-            v-model="data.name"
-            label="Name"
-            hint="Enter the name of the item"
-            placeholder="i.e. LEATHER TOTE BAG"
-            :rules="[
-              (val) => (val && val.length > 0) || 'This field is required',
-            ]"
-            :disable="isPosting"
-          />
-
-          <q-input
-            type="textarea"
-            v-model="data.description"
-            label="Description"
-            hint="Enter the description of the item"
-            placeholder="i.e. Leather tote bag with a crackled effect."
-            :rules="[
-              (val) => (val && val.length > 0) || 'This field is required',
-            ]"
-            :disable="isPosting"
-          />
-
+          <p class="text-h5">Item Details</p>
           <q-select
-            v-model="data.type"
-            :options="['Fashion', 'Sneakers']"
-            label="Type"
-            hint="Enter the type of the item"
-            placeholder="i.e. Fashion"
-            :rules="[
-              (val) => (val && val.length > 0) || 'This field is required',
-            ]"
-            :disable="isPosting"
+            v-model="stock"
+            :options="stockAvailable"
+            label="Item to be sold"
+            hint="Select an item from stock"
+            @update:model-value="onStockChange"
+            :loading="isStockLoading"
           />
 
-          <q-input
-            v-model="data.brand"
-            label="Brand"
-            hint="Enter the brand of the item"
-            placeholder="i.e. Zara"
-            :disable="isPosting"
-          />
+          <q-separator class="q-my-lg" />
 
-          <q-input
-            v-model="data.model"
-            label="Model"
-            hint="Enter the model of the item"
-            placeholder="i.e. Leather Totem 2023 White"
-            :disable="isPosting"
-          />
-
-          <q-input
-            v-model="data.size"
-            label="Size"
-            hint="Enter the size of the item"
-            placeholder="i.e. L"
-            :disable="isPosting"
-          />
-        </div>
-        <div class="col">
           <p class="text-h5">Sales details</p>
           <q-input
             v-model="data.consumer"
@@ -110,14 +61,16 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useItemsStore } from 'stores/items';
+import { useStockStore } from 'stores/stock';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 const router = useRouter();
 
-const store = useItemsStore();
+const itemsStore = useItemsStore();
+const stockStore = useStockStore();
 
 const $q = useQuasar();
 
@@ -125,14 +78,30 @@ const initialData = {
   name: '',
   description: '',
   type: '',
-  brand: '',
-  model: '',
-  size: '',
+  properties: {},
   consumer: '',
   transaction: '',
 };
 
 const data = ref(initialData);
+const stock = ref(null);
+
+onMounted(() => {
+  stockStore.fetchAll();
+});
+
+const stockAvailable = computed(() => {
+  return stockStore.list.map((item) => {
+    return {
+      label: item.name,
+      value: item,
+    };
+  });
+});
+
+const isStockLoading = computed(() => {
+  return stockStore.is.fetching;
+});
 
 const isSubmitEnabled = computed(() => {
   return (
@@ -145,8 +114,19 @@ const isSubmitEnabled = computed(() => {
 });
 
 const isPosting = computed(() => {
-  return store.isPosting;
+  return itemsStore.isPosting;
 });
+
+function onStockChange() {
+  const item = stock.value.value;
+  data.value = {
+    ...data.value,
+    name: item.name,
+    description: item.description,
+    type: item.type,
+    properties: item.properties,
+  };
+}
 
 async function onSubmit() {
   const payload = {
@@ -156,21 +136,17 @@ async function onSubmit() {
     type: data.value.type,
     consumer: data.value.consumer,
     transaction: data.value.transaction,
-    properties: {
-      brand: data.value.brand,
-      model: data.value.model,
-      size: data.value.size,
-    },
+    properties: data.value.properties,
   };
 
-  store
+  itemsStore
     .add(payload)
     .then(() => {
       $q.notify({
         type: 'positive',
         message: 'Item added successfully',
       });
-      router.push({ name: 'items' });
+      router.push({ name: 'tags' });
     })
     .catch(() => {
       $q.notify({

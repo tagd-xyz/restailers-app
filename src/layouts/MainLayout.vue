@@ -30,8 +30,10 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/items" label="My Items" />
-        <q-route-tab to="/items/add" label="Add item" />
+        <q-route-tab to="/tags" label="My Tags" />
+        <q-route-tab to="/tags/add" label="Add tag" />
+        <q-route-tab to="/stock" label="My Stock" />
+        <q-route-tab to="/stock/add" label="Add stock" />
       </q-tabs>
     </q-header>
 

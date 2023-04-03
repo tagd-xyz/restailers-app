@@ -26,7 +26,7 @@ onMounted(() => {
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
       // this.$fireModule.auth.GoogleAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: '/items',
+    signInSuccessUrl: '/tags',
     callbacks: {
       signInSuccessWithAuthResult(authResult) {
         store.signIn(authResult.user);
@@ -38,7 +38,7 @@ onMounted(() => {
   auth.onAuthStateChanged(async (user) => {
     if (user) {
       // user is logged in, redirect
-      router.push({ name: 'items' });
+      router.push({ name: 'tags' });
     } else {
       // user is logged out, start FirebaseUI
       authUI.start('#firebaseui-auth-container', config);

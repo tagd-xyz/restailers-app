@@ -33,9 +33,9 @@ const list = computed(() => {
 });
 
 function onRowClicked(evt, row) {
-  router.push({ name: 'items', id: row.id });
+  router.push({ name: 'tags', id: row.id });
   router.push({
-    name: 'itemsShow',
+    name: 'tagsShow',
     params: {
       id: row.id,
     },
