@@ -24,8 +24,9 @@
             :rules="[
               (val) => (val && val.length > 0) || 'This field is required',
               (val) =>
-                val.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/) ||
-                'Please write a valid email address',
+                val.match(
+                  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+                ) || 'Please write a valid email address',
             ]"
             :disable="isPosting"
           />
