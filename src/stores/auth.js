@@ -6,6 +6,7 @@ export const useAuthStore = defineStore('auth', {
     return {
       user: false,
       token: false,
+      interval: null,
     };
   },
   getters: {
@@ -22,6 +23,12 @@ export const useAuthStore = defineStore('auth', {
     },
     setToken(token) {
       this.token = token;
+    },
+    setInterval(interval) {
+      this.interval = interval;
+    },
+    clearInterval() {
+      this.interval = null;
     },
   },
 });
