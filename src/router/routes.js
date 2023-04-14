@@ -43,7 +43,6 @@ const routes = [
       },
     ],
   },
-
   {
     path: '/auth',
     component: () => import('layouts/AuthLayout.vue'),
@@ -52,6 +51,17 @@ const routes = [
         name: 'signIn',
         path: '',
         component: () => import('pages/SignIn/Index.vue'),
+      },
+    ],
+  },
+  {
+    path: '/splash',
+    component: () => import('layouts/AuthLayout.vue'),
+    children: [
+      {
+        name: 'splash',
+        path: '',
+        component: () => import('pages/SignIn/Splash.vue'),
       },
     ],
   },
