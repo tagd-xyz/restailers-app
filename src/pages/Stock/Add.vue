@@ -29,7 +29,7 @@
 
           <q-select
             v-model="data.type"
-            :options="['Fashion', 'Sneakers']"
+            :options="['fashion', 'sneakers']"
             label="Type"
             hint="Enter the type of the item"
             placeholder="i.e. Fashion"
