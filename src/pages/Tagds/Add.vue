@@ -82,6 +82,7 @@ const initialData = {
   properties: {},
   consumer: '',
   transaction: '',
+  images: [],
 };
 
 const data = ref(initialData);
@@ -126,6 +127,9 @@ function onStockChange() {
     description: item.description,
     type: item.type,
     properties: item.properties,
+    images: item.images.map(function (image) {
+      return image.uploadId;
+    }),
   };
 }
 
@@ -138,6 +142,7 @@ async function onSubmit() {
     consumer: data.value.consumer,
     transaction: data.value.transaction,
     properties: data.value.properties,
+    imageUploads: data.value.images,
   };
 
   itemsStore
