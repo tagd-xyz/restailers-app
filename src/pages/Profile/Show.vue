@@ -65,7 +65,6 @@ const actorId = computed(() => {
 });
 
 onMounted(() => {
-  console.log('actor', actorId.value);
   storeMe.fetch().then(() => {
     const actor = storeMe.data.actors.find(
       (actor) => actor.id == actorId.value

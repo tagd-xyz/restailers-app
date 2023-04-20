@@ -55,6 +55,21 @@
               </div>
             </q-card-section>
           </q-card>
+
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Images</div>
+              <div class="row">
+                <div
+                  class="col-1"
+                  v-for="image in tagd?.item?.images"
+                  :key="image.id"
+                >
+                  <img :src="image.thumbnail" />
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
         </div>
       </div>
 

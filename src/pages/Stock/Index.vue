@@ -40,7 +40,6 @@ function onRowClicked(evt, row) {
       id: row.id,
     },
   });
-  // console.log(row.id);
 }
 
 onMounted(() => {

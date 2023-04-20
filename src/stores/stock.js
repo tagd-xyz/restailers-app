@@ -12,6 +12,7 @@ export const useStockStore = defineStore('stock', {
         fetchingSingle: false,
         deleting: false,
         posting: false,
+        updating: false,
       },
     };
   },
@@ -83,6 +84,36 @@ export const useStockStore = defineStore('stock', {
           })
           .finally(() => {
             this.is.deleting = false;
+          });
+      });
+    },
+    requestImageUpload(stockId, fileName) {
+      return new Promise((resolve, reject) => {
+        api
+          .post('stock/' + stockId + '/uploads', {
+            fileName: fileName,
+          })
+          .then((response) => {
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    update(stockId, payload) {
+      return new Promise((resolve, reject) => {
+        this.is.updating = true;
+        api
+          .put('stock/' + stockId, payload)
+          .then((response) => {
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+          })
+          .finally(() => {
+            this.is.updating = false;
           });
       });
     },
