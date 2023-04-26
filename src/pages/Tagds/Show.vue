@@ -17,7 +17,12 @@
                 sold by {{ tagd?.item?.retailer ?? 'Unknown' }}
               </div>
               <q-separator class="q-my-md" />
-              <div class="text">{{ tagd?.item?.description }}</div>
+              <div
+                class="text"
+                v-html="
+                  tagd?.item?.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                "
+              />
             </q-card-section>
           </q-card>
 

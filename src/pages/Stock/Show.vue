@@ -15,7 +15,10 @@
               </div>
               <q-separator class="q-my-sm" />
               <strong>Description:</strong>
-              <div class="text">{{ stock?.description }}</div>
+              <div
+                class="text"
+                v-html="stock?.description.replace(/(?:\r\n|\r|\n)/g, '<br />')"
+              />
             </q-card-section>
           </q-card>
 
