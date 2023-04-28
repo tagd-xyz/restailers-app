@@ -56,7 +56,8 @@
                 sold to {{ tagd?.consumer?.email }}
               </div>
               <div class="text-subtitle2">
-                on {{ date.formatDate(tagd?.createdAt, 'MMMM Do, YYYY H:m:s') }}
+                on
+                {{ date.formatDate(tagd?.createdAt, 'MMMM Do, YYYY HH:mm:ss') }}
               </div>
             </q-card-section>
           </q-card>
