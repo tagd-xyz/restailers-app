@@ -7,8 +7,7 @@ export const useTagdsStore = defineStore('tagds', {
     return {
       list: [],
       is: {
-        fetching: false,
-        deleting: false,
+        fetching: false,        
       },
     };
   },
