@@ -84,6 +84,23 @@
       <div class="column items-end">
         <div class="col q-gutter-sm">
           <q-btn
+            v-if="!isActivateEnabled"
+            label="Deactivate"
+            type="button"
+            color="warning"
+            :loading="isDeactivating"
+            :disabled="!isDeactivateEnabled"
+            @click="onDeactivateClicked"
+          />
+          <q-btn v-else
+            label="Activate"
+            type="button"
+            color="warning"
+            :loading="isActivating"
+            :disabled="!isActivateEnabled"
+            @click="onActivateClicked"
+          />
+          <q-btn
             label="Delete"
             type="button"
             color="negative"
@@ -125,8 +142,24 @@ const isDeleting = computed(() => {
   return tagdStore.is.deleting;
 });
 
+const isActivating = computed(() => {
+  return tagdStore.is.activating;
+});
+
+const isDeactivating = computed(() => {
+  return tagdStore.is.deactivating;
+});
+
 const isDeleteEnabled = computed(() => {
   return tagd.value?.status == 'inactive';
+});
+
+const isActivateEnabled = computed(() => {
+  return tagd.value?.status != 'active';
+});
+
+const isDeactivateEnabled = computed(() => {
+  return tagd.value?.childrenCount == 0;  
 });
 
 const tagd = computed(() => {
@@ -139,11 +172,48 @@ onMounted(() => {
 
 function onDeleteClicked() {
   itemsStore
-    .delete(tagd.value.item.id)
+    .delete(tagd.value.id)
     .then(() => {
       $q.notify({
         type: 'positive',
         message: 'Item deleted successfully',
+      });
+      router.push({ name: 'tags' });
+    })
+    .catch(() => {
+      $q.notify({
+        type: 'negative',
+        message: 'There has been an error',
+      });
+    });
+}
+
+function onActivateClicked() {
+  console.log(tagd.value.id);
+  tagdStore
+    .activate(tagd.value.id)
+    .then(() => {
+      $q.notify({
+        type: 'positive',
+        message: 'Item activated successfully',
+      });
+      router.push({ name: 'tags' });
+    })
+    .catch(() => {
+      $q.notify({
+        type: 'negative',
+        message: 'There has been an error',
+      });
+    });
+}
+
+function onDeactivateClicked() {
+  tagdStore
+    .deactivate(tagd.value.id)
+    .then(() => {
+      $q.notify({
+        type: 'positive',
+        message: 'Item deactivated successfully',
       });
       router.push({ name: 'tags' });
     })
