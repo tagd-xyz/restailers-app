@@ -44,6 +44,22 @@
                 <strong>Size:</strong>
                 {{ tagd?.item?.properties.size ?? 'Unknown' }}
               </div>
+              <div>
+                <strong>Year of production:</strong>
+                {{ tagd?.item?.properties.yearOfProduction ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Manufacturer's Serial Number:</strong>
+                {{ tagd?.item?.properties.manufacturerSerialNumber ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Retailer Serial Number:</strong>
+                {{ tagd?.item?.properties.retailerSerialNumber ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Recommended Retail Price:</strong>
+                {{ tagd?.item?.properties.rrp ?? 'Unknown' }}
+              </div>
             </q-card-section>
           </q-card>
         </div>
@@ -159,7 +175,7 @@ const isActivateEnabled = computed(() => {
 });
 
 const isDeactivateEnabled = computed(() => {
-  return tagd.value?.childrenCount == 0;  
+  return tagd.value?.childrenCount == 0;
 });
 
 const tagd = computed(() => {
