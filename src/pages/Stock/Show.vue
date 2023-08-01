@@ -37,6 +37,23 @@
                 <strong>Size:</strong>
                 {{ stock?.properties.size ?? 'Unknown' }}
               </div>
+              <div>
+                <strong>Year of production:</strong>
+                {{ stock?.properties.yearOfProduction ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Manufacturer's Serial Number:</strong>
+                {{ stock?.properties.manufacturerSerialNumber ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Retailer Serial Number:</strong>
+                {{ stock?.properties.retailerSerialNumber ?? 'Unknown' }}
+              </div>
+              <div>
+                <strong>Recommended Retail Price:</strong>
+                {{ stock?.properties.rrp ?? 'Unknown' }}
+              </div>
+
             </q-card-section>
           </q-card>
         </div>

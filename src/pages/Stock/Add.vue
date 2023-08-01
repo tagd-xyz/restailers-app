@@ -62,6 +62,30 @@
             placeholder="i.e. L"
             :disable="isPosting"
           />
+
+          <q-input
+            v-model="data.manufacturerSerialNumber"
+            label="Manufacturer's Serial Number"
+            hint="Enter the Manufacturer's Serial Number of the item"
+            placeholder="i.e. 123-456"
+            :disable="isPosting"
+          />
+
+          <q-input
+            v-model="data.yearOfProduction"
+            label="Year of Production"
+            hint="Enter the year of production of the item"
+            placeholder="i.e. 2000"
+            :disable="isPosting"
+          />
+
+          <q-input
+            v-model="data.rrp"
+            label="Recommended Retail Price"
+            hint="Enter the RRP of the item"
+            placeholder="i.e. 1000.50"
+            :disable="isPosting"
+          />
         </div>
       </div>
 
@@ -101,6 +125,9 @@ const initialData = {
   brand: '',
   model: '',
   size: '',
+  manufacturerSerialNumber: '',
+  yearOfProduction: '',
+  rrp: '',
 };
 
 const data = ref(initialData);
@@ -113,9 +140,8 @@ const isPosting = computed(() => {
   return store.isPosting;
 });
 
-async function onSubmit() {
-  const payload = {
-    // retailer: this.currentRetailer,
+const payload = computed(() => {
+  return {
     name: data.value.name,
     description: data.value.description,
     type: data.value.type,
@@ -123,11 +149,16 @@ async function onSubmit() {
       brand: data.value.brand,
       model: data.value.model,
       size: data.value.size,
+      manufacturerSerialNumber: data.value.manufacturerSerialNumber,
+      yearOfProduction: data.value.yearOfProduction,
+      rrp: data.value.rrp,
     },
   };
+});
 
+async function onSubmit() {
   store
-    .add(payload)
+    .add(payload.value)
     .then(() => {
       $q.notify({
         type: 'positive',

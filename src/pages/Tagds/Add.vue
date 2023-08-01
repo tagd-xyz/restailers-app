@@ -13,6 +13,14 @@
             :loading="isStockLoading"
           />
 
+          <q-input
+            v-model="data.serialNumber"
+            label="Serial Number"
+            hint="Enter the serial"
+            placeholder="i.e. 99c95a90-9629-4a5f-8191-a76077714030"
+            :disable="isPosting"
+          />
+
           <q-separator class="q-my-lg" />
 
           <p class="text-h5">Sales details</p>
@@ -81,6 +89,7 @@ const initialData = {
   type: '',
   properties: {},
   consumer: '',
+  serialNumber: '',
   transaction: '',
   images: [],
 };
@@ -119,6 +128,21 @@ const isPosting = computed(() => {
   return itemsStore.isPosting;
 });
 
+const payload = computed(() => {
+  return {
+    name: data.value.name,
+    description: data.value.description,
+    type: data.value.type,
+    consumer: data.value.consumer,
+    transaction: data.value.transaction,
+    properties: {
+      ...data.value.properties,
+      retailerSerialNumber: data.value.serialNumber,
+    },
+    imageUploads: data.value.images,
+  };
+});
+
 function onStockChange() {
   const item = stock.value.value;
   data.value = {
@@ -134,19 +158,8 @@ function onStockChange() {
 }
 
 async function onSubmit() {
-  const payload = {
-    // retailer: this.currentRetailer,
-    name: data.value.name,
-    description: data.value.description,
-    type: data.value.type,
-    consumer: data.value.consumer,
-    transaction: data.value.transaction,
-    properties: data.value.properties,
-    imageUploads: data.value.images,
-  };
-
   itemsStore
-    .add(payload)
+    .add(payload.value)
     .then(() => {
       $q.notify({
         type: 'positive',
