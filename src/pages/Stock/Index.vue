@@ -81,7 +81,7 @@ const columns = [
     required: false,
     label: 'Type',
     align: 'left',
-    field: (row) => row.type ?? 'Unknown',
+    field: (row) => row.type.name ?? 'Unknown',
     format: (val) => `${val}`,
     sortable: true,
   },
