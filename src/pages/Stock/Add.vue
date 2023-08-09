@@ -29,14 +29,13 @@
 
           <q-select
             v-model="data.type"
-            :options="['fashion', 'sneakers']"
+            :options="itemTypes"
             label="Type"
             hint="Enter the type of the item"
             placeholder="i.e. Fashion"
-            :rules="[
-              (val) => (val && val.length > 0) || 'This field is required',
-            ]"
-            :disable="isPosting"
+            :rules="[(val) => val || 'This field is required']"
+            :disable="isPosting || storeRef.is.fetching"
+            options-dense
           />
 
           <q-input
@@ -107,14 +106,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useStockStore } from 'stores/stock';
+import { useRefStore } from 'stores/ref';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 const router = useRouter();
 
 const store = useStockStore();
+
+const storeRef = useRefStore();
 
 const $q = useQuasar();
 
@@ -132,6 +134,8 @@ const initialData = {
 
 const data = ref(initialData);
 
+// const itemTypeSelected = ref(null);
+
 const isSubmitEnabled = computed(() => {
   return data.value.name && data.value.description && data.value.type;
 });
@@ -144,7 +148,7 @@ const payload = computed(() => {
   return {
     name: data.value.name,
     description: data.value.description,
-    type: data.value.type,
+    type: data.value.type.value,
     properties: {
       brand: data.value.brand,
       model: data.value.model,
@@ -173,4 +177,38 @@ async function onSubmit() {
       });
     });
 }
+
+function processNodes(nodes, prefix = '') {
+  const list = [];
+
+  let label = '';
+
+  nodes.forEach((node) => {
+    label = `${prefix} / ${node.name}`;
+    if ('' === prefix) {
+      label = node.name;
+    }
+    list.push({
+      label: label,
+      value: node.id,
+    });
+    if (node.children) {
+      processNodes(node.children, label).forEach((child) => {
+        list.push(child);
+      });
+    }
+  });
+
+  return list;
+}
+
+const itemTypes = computed(() => {
+  return processNodes(storeRef.data.itemTypes);
+});
+
+onMounted(() => {
+  if (!storeRef.is.fetching) {
+    storeRef.fetchItemTypes();
+  }
+});
 </script>
