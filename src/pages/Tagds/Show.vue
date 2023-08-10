@@ -68,6 +68,7 @@
             <q-card-section>
               <div class="text-h6">Transaction</div>
               <div class="text-subtitle2">ID {{ tagd?.meta?.transaction }}</div>
+              <div class="text-subtitle2">Price {{ tagd?.meta?.price?.amount }} {{ tagd?.meta?.price?.currency }}</div>
               <div class="text-subtitle2">
                 sold to {{ tagd?.consumer?.email }}
               </div>

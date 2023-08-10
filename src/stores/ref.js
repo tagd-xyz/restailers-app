@@ -7,6 +7,7 @@ export const useRefStore = defineStore('ref', {
     return {
       data: {
         itemTypes: [],
+        currencies: [],
       },
       is: {
         fetching: false,
@@ -23,6 +24,24 @@ export const useRefStore = defineStore('ref', {
           .get('ref/item-types')
           .then((response) => {
             this.data.itemTypes = response.data.data;
+            resolve(response);
+          })
+          .catch((error) => {
+            this.data = null;
+            reject(error);
+          })
+          .finally(() => {
+            this.is.fetching = false;
+          });
+      });
+    },
+    fetchCurrencies() {
+      return new Promise((resolve, reject) => {
+        this.is.fetching = true;
+        api
+          .get('ref/currencies')
+          .then((response) => {
+            this.data.currencies = response.data.data;
             resolve(response);
           })
           .catch((error) => {
