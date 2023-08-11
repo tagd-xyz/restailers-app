@@ -206,7 +206,6 @@ function onDeleteClicked() {
 }
 
 function onActivateClicked() {
-  console.log(tagd.value.id);
   tagdStore
     .activate(tagd.value.id)
     .then(() => {
