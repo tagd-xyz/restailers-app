@@ -49,7 +49,6 @@
 
           <q-input
             v-model.number="data.amount"
-            type="number"
             label="Amount"
             hint="Enter the amount"
             placeholder="i.e. 150"
