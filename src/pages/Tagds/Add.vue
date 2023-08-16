@@ -40,6 +40,25 @@
           />
 
           <q-select
+            v-model="data.country"
+            :options="countries"
+            label="Country"
+            hint="Select a country from list"
+            :loading="isPosting"
+          />
+
+          <q-input
+            v-model="data.city"
+            label="City"
+            hint="Enter the city"
+            placeholder="London"
+            :rules="[
+              (val) => (val && val.length > 0) || 'This field is required',
+            ]"
+            :disable="isPosting"
+          />
+
+          <q-select
             v-model="data.currency"
             :options="currencies"
             label="Currency"
@@ -66,8 +85,6 @@
             ]"
             :disable="isPosting"
           />
-
-          {{ payload }}
         </div>
       </div>
 
@@ -113,6 +130,8 @@ const initialData = {
   serialNumber: '',
   currency: null,
   amount: '',
+  country: null,
+  city: '',
   transaction: '',
   images: [],
 };
@@ -123,6 +142,7 @@ const stock = ref(null);
 onMounted(() => {
   stockStore.fetchAll();
   refStore.fetchCurrencies();
+  refStore.fetchCountries();
 });
 
 const stockAvailable = computed(() => {
@@ -143,6 +163,15 @@ const currencies = computed(() => {
     return {
       label: `${currency.name} (${currency.symbol})`,
       value: currency.code,
+    };
+  });
+});
+
+const countries = computed(() => {
+  return refStore.data.countries.map((country) => {
+    return {
+      label: `${country.name}`,
+      value: country.code,
     };
   });
 });
@@ -172,6 +201,10 @@ const payload = computed(() => {
       currency: data.value.currency?.value ?? null,
       amount: data.value.amount,
     },
+    location: {
+      country: data.value.country?.value ?? null,
+      city: data.value.city,
+    },
     properties: {
       ...data.value.properties,
       retailerSerialNumber: data.value.serialNumber,
@@ -199,6 +232,13 @@ watch(currencies, () => {
     return currency.value === 'GBP';
   });
   data.value.currency = currency;
+});
+
+watch(countries, () => {
+  const country = countries.value.find((country) => {
+    return country.value === 'GBR';
+  });
+  data.value.country = country;
 });
 
 async function onSubmit() {
