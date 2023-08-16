@@ -39,6 +39,23 @@
             :disable="isPosting"
           />
 
+          <q-select
+            v-model="data.currency"
+            :options="currencies"
+            label="Currency"
+            hint="Select a currency from list"
+            :loading="isPosting"
+          />
+
+          <q-input
+            v-model.number="data.amount"
+            label="Amount"
+            hint="Enter the amount"
+            placeholder="i.e. 150"
+            :rules="[(val) => (val && val > 0) || 'This field is required']"
+            :disable="isPosting"
+          />
+
           <q-input
             v-model="data.transaction"
             label="Transaction ID"
@@ -49,6 +66,8 @@
             ]"
             :disable="isPosting"
           />
+
+          {{ payload }}
         </div>
       </div>
 
@@ -70,9 +89,10 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useItemsStore } from 'stores/items';
 import { useStockStore } from 'stores/stock';
+import { useRefStore } from 'stores/ref';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
@@ -80,6 +100,7 @@ const router = useRouter();
 
 const itemsStore = useItemsStore();
 const stockStore = useStockStore();
+const refStore = useRefStore();
 
 const $q = useQuasar();
 
@@ -90,6 +111,8 @@ const initialData = {
   properties: {},
   consumer: '',
   serialNumber: '',
+  currency: null,
+  amount: '',
   transaction: '',
   images: [],
 };
@@ -99,6 +122,7 @@ const stock = ref(null);
 
 onMounted(() => {
   stockStore.fetchAll();
+  refStore.fetchCurrencies();
 });
 
 const stockAvailable = computed(() => {
@@ -112,6 +136,15 @@ const stockAvailable = computed(() => {
 
 const isStockLoading = computed(() => {
   return stockStore.is.fetching;
+});
+
+const currencies = computed(() => {
+  return refStore.data.currencies.map((currency) => {
+    return {
+      label: `${currency.name} (${currency.symbol})`,
+      value: currency.code,
+    };
+  });
 });
 
 const isSubmitEnabled = computed(() => {
@@ -132,9 +165,13 @@ const payload = computed(() => {
   return {
     name: data.value.name,
     description: data.value.description,
-    type: data.value.type,
+    type: data.value.type?.id,
     consumer: data.value.consumer,
     transaction: data.value.transaction,
+    price: {
+      currency: data.value.currency?.value ?? null,
+      amount: data.value.amount,
+    },
     properties: {
       ...data.value.properties,
       retailerSerialNumber: data.value.serialNumber,
@@ -156,6 +193,13 @@ function onStockChange() {
     }),
   };
 }
+
+watch(currencies, () => {
+  const currency = currencies.value.find((currency) => {
+    return currency.value === 'GBP';
+  });
+  data.value.currency = currency;
+});
 
 async function onSubmit() {
   itemsStore
