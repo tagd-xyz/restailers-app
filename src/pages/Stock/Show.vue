@@ -24,7 +24,7 @@
 
           <q-card flat>
             <q-card-section>
-              <div><strong>Type:</strong> {{ stock?.type ?? 'Unknown' }}</div>
+              <div><strong>Type:</strong> {{ stock?.type?.name ?? 'Unknown' }}</div>
               <div>
                 <strong>Brand:</strong>
                 {{ stock?.properties.brand ?? 'Unknown' }}
