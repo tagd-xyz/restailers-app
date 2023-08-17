@@ -24,7 +24,7 @@ export const useRefStore = defineStore('ref', {
         api
           .get('ref/countries')
           .then((response) => {
-            this.data.itemTypes = response.data.data;
+            this.data.countries = response.data.data;
             resolve(response);
           })
           .catch((error) => {
