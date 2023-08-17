@@ -134,7 +134,6 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useTagdStore } from 'stores/tagd';
-import { useItemsStore } from 'stores/items';
 import { useRoute, useRouter } from 'vue-router';
 import { date } from 'quasar';
 import { useQuasar } from 'quasar';
@@ -143,7 +142,6 @@ const router = useRouter();
 const route = useRoute();
 
 const tagdStore = useTagdStore();
-const itemsStore = useItemsStore();
 
 const $q = useQuasar();
 
@@ -188,7 +186,7 @@ onMounted(() => {
 });
 
 function onDeleteClicked() {
-  itemsStore
+  tagdStore
     .delete(tagd.value.id)
     .then(() => {
       $q.notify({
