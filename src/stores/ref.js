@@ -42,7 +42,7 @@ export const useRefStore = defineStore('ref', {
         api
           .get('ref/currencies')
           .then((response) => {
-            this.data.itemTypes = response.data.data;
+            this.data.currencies = response.data.data;
             resolve(response);
           })
           .catch((error) => {
