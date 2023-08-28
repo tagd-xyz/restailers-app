@@ -12,11 +12,25 @@
       page: 1,
       rowsPerPage: 50,
     }"
-  />
+  >
+    <template v-slot:top-right>
+      <q-input
+        borderless
+        dense
+        debounce="300"
+        v-model="filter"
+        placeholder="Search"
+      >
+        <template v-slot:append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+    </template>
+  </q-table>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { date } from 'quasar';
 import { useTagdsStore } from 'stores/tagds';
 import { useRouter } from 'vue-router';
@@ -24,12 +38,23 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const store = useTagdsStore();
 
+const filter = ref('');
+
 const isLoading = computed(() => {
   return store.is.fetching;
 });
 
 const list = computed(() => {
-  return store.list;
+  return store.list.filter((tagd) => {
+    const keyword = filter.value.trim().toLowerCase();
+    if (keyword.length === '') {
+      return true;
+    }
+
+    return tagd.item.name.toLowerCase().includes(keyword)
+      || tagd.item.properties?.model?.toLowerCase().includes(keyword)
+      || tagd.status.toLowerCase().includes(keyword);
+  });
 });
 
 function onRowClicked(evt, row) {
