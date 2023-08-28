@@ -9,8 +9,10 @@ export const useTagdStore = defineStore('tagd', {
       is: {
         fetching: false,
         deleting: false,
+        returning: false,
         deactivating: false,
         activating: false,
+        returnint: false,
       },
     };
   },
@@ -48,6 +50,24 @@ export const useTagdStore = defineStore('tagd', {
           })
           .finally(() => {
             this.is.deleting = false;
+          });
+      });
+    },
+    return(tagdId) {
+      return new Promise((resolve, reject) => {
+        this.is.returning = true;
+        api
+          .post('tagds/' + tagdId + '/return')
+          .then((response) => {
+            this.data = null;
+            resolve(response);
+          })
+          .catch((error) => {
+            this.data = null;
+            reject(error);
+          })
+          .finally(() => {
+            this.is.returning = false;
           });
       });
     },
