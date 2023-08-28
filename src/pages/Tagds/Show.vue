@@ -118,6 +118,14 @@
             @click="onActivateClicked"
           />
           <q-btn
+            label="Return"
+            type="button"
+            color="warning"
+            :loading="isReturning"
+            :disabled="!isReturnEnabled"
+            @click="onReturnClicked"
+          />
+          <q-btn
             label="Delete"
             type="button"
             color="negative"
@@ -165,16 +173,24 @@ const isDeactivating = computed(() => {
   return tagdStore.is.deactivating;
 });
 
+const isReturning = computed(() => {
+  return false;
+});
+
 const isDeleteEnabled = computed(() => {
   return tagd.value?.status == 'inactive';
 });
 
 const isActivateEnabled = computed(() => {
-  return tagd.value?.status != 'active';
+  return tagd.value?.status != 'active' && !tagd.value?.isReturned;
 });
 
 const isDeactivateEnabled = computed(() => {
-  return tagd.value?.childrenCount == 0;
+  return tagd.value?.childrenCount == 0 && !tagd.value?.isReturned;
+});
+
+const isReturnEnabled = computed(() => {
+  return tagd.value?.isActive;
 });
 
 const tagd = computed(() => {
@@ -184,6 +200,24 @@ const tagd = computed(() => {
 onMounted(() => {
   tagdStore.fetch(tagdId.value);
 });
+
+function onReturnClicked() {
+  tagdStore
+    .return(tagd.value.id)
+    .then(() => {
+      $q.notify({
+        type: 'positive',
+        message: 'Item returned successfully',
+      });
+      router.push({ name: 'tags' });
+    })
+    .catch(() => {
+      $q.notify({
+        type: 'negative',
+        message: 'There has been an error',
+      });
+    });
+}
 
 function onDeleteClicked() {
   tagdStore
