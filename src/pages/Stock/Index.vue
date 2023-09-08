@@ -81,15 +81,9 @@ const list = computed(() => {
     .map((item) => {
       return {
         ...item,
-        thumbnail: item.images[0].thumbnail ?? null,
+        thumbnail: item.images[0]?.thumbnail ?? null,
       };
     });
-  // return store.list.map((item) => {
-  //   return {
-  //     ...item,
-  //     thumbnail: item.images[0].thumbnail ?? null,
-  //   };
-  // });
 });
 
 function onRowClicked(row) {
