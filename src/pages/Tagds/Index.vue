@@ -5,7 +5,6 @@
     :rows="list"
     :columns="columns"
     row-key="name"
-    @row-click="onRowClicked"
     :pagination="{
       sortBy: 'desc',
       descending: false,
@@ -26,6 +25,25 @@
         </template>
       </q-input>
     </template>
+    <template v-slot:body="props">
+      <q-tr @click="onRowClicked(props.row)">
+        <q-td v-for="col in props.cols" :key="col.name" :props="props">
+          <q-img
+            v-if="col.name == 'thumbnail'"
+            :src="col.value"
+            spinner-color="white"
+            style="height: 2rem; max-width: 2rem"
+            fit="cover"
+          />
+          <span v-else>
+            {{ col.value }}
+          </span>
+        </q-td>
+        <!-- <q-td key="thumbnail" :props="props">
+          {{ props.row.name }}
+        </q-td> -->
+      </q-tr>
+    </template>
   </q-table>
 </template>
 
@@ -45,19 +63,33 @@ const isLoading = computed(() => {
 });
 
 const list = computed(() => {
-  return store.list.filter((tagd) => {
-    const keyword = filter.value.trim().toLowerCase();
-    if (keyword.length === '') {
-      return true;
-    }
-
-    return tagd.item.name.toLowerCase().includes(keyword)
-      || tagd.item.properties?.model?.toLowerCase().includes(keyword)
-      || tagd.status.toLowerCase().includes(keyword);
-  });
+  return store.list
+    .filter((item) => {
+      const keyword = filter.value.toLowerCase();
+      return (
+        item.status
+          .toLowerCase()
+          .includes(keyword) ||
+        item.item.retailer.toLowerCase().includes(keyword) ||
+        item.item.properties?.brand
+          .toLowerCase()
+          .includes(keyword) ||
+        item.item.properties?.model
+          .toLowerCase()
+          .includes(keyword) ||
+        item.item.type.name.toLowerCase().includes(keyword) ||
+        item.item.retailer.toLowerCase().includes(keyword)
+      );
+    })
+    .map((item) => {
+      return {
+        ...item,
+        thumbnail: item.item.images[0].thumbnail ?? null,
+      };
+    });
 });
 
-function onRowClicked(evt, row) {
+function onRowClicked(row) {
   router.push({ name: 'tags', id: row.id });
   router.push({
     name: 'tagsShow',
@@ -84,12 +116,21 @@ const columns = [
     sortable: true,
   },
   {
+    name: 'retailer',
+    required: false,
+    label: 'Retailer',
+    align: 'left',
+    field: (row) => row.item.retailer,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
     name: 'status',
     required: true,
     label: 'Status',
     align: 'left',
     field: (row) => row.status,
-    format: (val) => `${val}`,
+    format: (val) => `${val}`.toUpperCase(),
     sortable: true,
   },
   {
@@ -101,24 +142,15 @@ const columns = [
     format: (val) => `${val}`,
     sortable: true,
   },
-  {
-    name: 'retailer',
-    required: false,
-    label: 'Retailer',
-    align: 'left',
-    field: (row) => row.item.retailer,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: 'item',
-    required: false,
-    label: 'Item',
-    align: 'left',
-    field: (row) => row.item.name,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
+  // {
+  //   name: 'item',
+  //   required: false,
+  //   label: 'Item',
+  //   align: 'left',
+  //   field: (row) => row.item.name,
+  //   format: (val) => `${val}`,
+  //   sortable: true,
+  // },
   {
     name: 'type',
     required: false,
@@ -153,6 +185,24 @@ const columns = [
     align: 'left',
     field: (row) => row.item.properties?.size ?? 'Unknown',
     format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'rrp',
+    required: false,
+    label: 'RRP',
+    align: 'right',
+    field: (row) =>
+      new Intl.NumberFormat().format(row.item.properties?.rrp) ?? 'Unknown',
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: 'thumbnail',
+    required: false,
+    label: 'Thumbnail',
+    align: 'center',
+    field: (row) => row.thumbnail,
     sortable: true,
   },
 ];
