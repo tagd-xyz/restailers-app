@@ -84,7 +84,7 @@ const list = computed(() => {
     .map((item) => {
       return {
         ...item,
-        thumbnail: item.item.images[0].thumbnail ?? null,
+        thumbnail: item.item.images[0]?.thumbnail ?? null,
       };
     });
 });
