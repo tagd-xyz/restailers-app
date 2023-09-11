@@ -78,7 +78,8 @@ const list = computed(() => {
           .toLowerCase()
           .includes(keyword) ||
         item.item.type.name.toLowerCase().includes(keyword) ||
-        item.item.retailer.toLowerCase().includes(keyword)
+        item.item.retailer.toLowerCase().includes(keyword) ||
+        item.slug.toLowerCase().includes(keyword)
       );
     })
     .map((item) => {
