@@ -46,12 +46,9 @@
                 {{ stock?.properties.manufacturerSerialNumber ?? 'Unknown' }}
               </div>
               <div>
-                <strong>Retailer Serial Number:</strong>
-                {{ stock?.properties.retailerSerialNumber ?? 'Unknown' }}
-              </div>
-              <div>
                 <strong>Recommended Retail Price:</strong>
                 {{ stock?.properties.rrp ?? 'Unknown' }}
+                {{ stock?.properties.currency ?? '' }}
               </div>
 
             </q-card-section>

@@ -131,6 +131,15 @@ const columns = [
     sortable: true,
   },
   {
+    name: 'name',
+    required: false,
+    label: 'Name',
+    align: 'left',
+    field: (row) => row.name,
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
     name: 'brand',
     required: false,
     label: 'Brand',
@@ -172,7 +181,8 @@ const columns = [
     label: 'RRP',
     align: 'right',
     field: (row) =>
-      new Intl.NumberFormat().format(row.properties?.rrp) ?? 'Unknown',
+      (new Intl.NumberFormat().format(row.properties?.rrp) ?? 'Unknown')
+      + (' ' + (row.properties?.currency ?? '')),
     format: (val) => `${val}`,
     sortable: true,
   },
