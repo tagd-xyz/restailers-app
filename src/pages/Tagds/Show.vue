@@ -81,6 +81,20 @@
                 on
                 {{ date.formatDate(tagd?.createdAt, 'MMMM Do, YYYY HH:mm:ss') }}
               </div>
+              <div v-if="tagd?.meta?.price">
+              <div class="text-subtitle2">
+                Price: {{ tagd.meta.price.amount }}
+                {{ tagd.meta.price.currency }}
+              </div>
+            </div>
+            <div v-else>Price Not available</div>
+            <div v-if="tagd?.meta?.location">
+              <div class="text-subtitle2">
+                Location: {{ tagd.meta.location.city }},
+                {{ findCountryByCode(tagd.meta.location.country)?.label }}
+              </div>
+            </div>
+            <div v-else>Location Not available</div>
             </q-card-section>
           </q-card>
 
@@ -151,11 +165,13 @@ import { useTagdStore } from 'stores/tagd';
 import { useRoute, useRouter } from 'vue-router';
 import { date } from 'quasar';
 import { useQuasar } from 'quasar';
+import { useRefStore } from 'stores/ref';
 
 const router = useRouter();
 const route = useRoute();
 
 const tagdStore = useTagdStore();
+const storeRef = useRefStore();
 
 const $q = useQuasar();
 
@@ -209,6 +225,7 @@ const tagd = computed(() => {
 
 onMounted(() => {
   tagdStore.fetch(tagdId.value);
+  storeRef.fetchCountries();
 });
 
 function onReturnClicked() {
@@ -283,4 +300,21 @@ function onDeactivateClicked() {
       });
     });
 }
+
+function findCountryByCode(code) {
+  return countries.value.find((country) => {
+    return country.value === code;
+  });
+}
+
+const countries = computed(() => {
+  return (
+    storeRef.data.countries?.map((country) => {
+      return {
+        label: `${country.name}`,
+        value: country.code,
+      };
+    }) ?? []
+  );
+});
 </script>
