@@ -50,7 +50,9 @@
               </div>
               <div>
                 <strong>Manufacturer's Serial Number:</strong>
-                {{ tagd?.item?.properties.manufacturerSerialNumber ?? 'Unknown' }}
+                {{
+                  tagd?.item?.properties.manufacturerSerialNumber ?? 'Unknown'
+                }}
               </div>
               <div>
                 <strong>Retailer Serial Number:</strong>
@@ -68,7 +70,10 @@
             <q-card-section>
               <div class="text-h6">Transaction</div>
               <div class="text-subtitle2">ID {{ tagd?.meta?.transaction }}</div>
-              <div class="text-subtitle2">Price {{ tagd?.meta?.price?.amount }} {{ tagd?.meta?.price?.currency }}</div>
+              <div class="text-subtitle2">
+                Price {{ tagd?.meta?.price?.amount }}
+                {{ tagd?.meta?.price?.currency }}
+              </div>
               <div class="text-subtitle2">
                 sold to {{ tagd?.consumer?.email }}
               </div>
@@ -109,7 +114,8 @@
             :disabled="!isDeactivateEnabled"
             @click="onDeactivateClicked"
           />
-          <q-btn v-else
+          <q-btn
+            v-else
             label="Activate"
             type="button"
             color="warning"
@@ -182,11 +188,15 @@ const isDeleteEnabled = computed(() => {
 });
 
 const isActivateEnabled = computed(() => {
-  return tagd.value?.status != 'active' && !tagd.value?.isReturned;
+  return tagd.value?.status == 'inactive';
 });
 
 const isDeactivateEnabled = computed(() => {
-  return tagd.value?.childrenCount == 0 && !tagd.value?.isReturned;
+  return (
+    tagd.value?.status == 'active' &&
+    tagd.value?.childrenCount == 0 &&
+    !tagd.value?.isReturned
+  );
 });
 
 const isReturnEnabled = computed(() => {
