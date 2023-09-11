@@ -194,7 +194,8 @@ const columns = [
     label: 'RRP',
     align: 'right',
     field: (row) =>
-      new Intl.NumberFormat().format(row.item.properties?.rrp) ?? 'Unknown',
+      (new Intl.NumberFormat().format(row.item.properties?.rrp) ?? 'Unknown')
+      + (' ' + (row.item.properties?.currency ?? '')),
     format: (val) => `${val}`,
     sortable: true,
   },
