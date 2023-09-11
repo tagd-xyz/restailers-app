@@ -85,6 +85,14 @@
             placeholder="i.e. 1000.50"
             :disable="isPosting"
           />
+
+          <q-select
+            v-model="data.currency"
+            :options="currencies"
+            label="Currency"
+            hint="Select a currency from list"
+            :loading="isPosting"
+          />
         </div>
       </div>
 
@@ -106,7 +114,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useStockStore } from 'stores/stock';
 import { useRefStore } from 'stores/ref';
 import { useRouter } from 'vue-router';
@@ -130,6 +138,7 @@ const initialData = {
   manufacturerSerialNumber: '',
   yearOfProduction: '',
   rrp: '',
+  currency: '',
 };
 
 const data = ref(initialData);
@@ -156,6 +165,7 @@ const payload = computed(() => {
       manufacturerSerialNumber: data.value.manufacturerSerialNumber,
       yearOfProduction: data.value.yearOfProduction,
       rrp: data.value.rrp,
+      currency: data.value.currency.value,
     },
   };
 });
@@ -202,6 +212,22 @@ function processNodes(nodes, prefix = '') {
   return list;
 }
 
+const currencies = computed(() => {
+  return storeRef.data.currencies.map((currency) => {
+    return {
+      label: `${currency.name} (${currency.symbol})`,
+      value: currency.code,
+    };
+  });
+});
+
+watch(currencies, () => {
+  const currency = currencies.value.find((currency) => {
+    return currency.value === 'GBP';
+  });
+  data.value.currency = currency;
+});
+
 const itemTypes = computed(() => {
   return processNodes(storeRef.data.itemTypes);
 });
@@ -209,6 +235,7 @@ const itemTypes = computed(() => {
 onMounted(() => {
   if (!storeRef.is.fetching) {
     storeRef.fetchItemTypes();
+    storeRef.fetchCurrencies();
   }
 });
 </script>
