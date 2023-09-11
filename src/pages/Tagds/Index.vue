@@ -78,7 +78,8 @@ const list = computed(() => {
           .toLowerCase()
           .includes(keyword) ||
         item.item.type.name.toLowerCase().includes(keyword) ||
-        item.item.retailer.toLowerCase().includes(keyword)
+        item.item.retailer.toLowerCase().includes(keyword) ||
+        item.slug.toLowerCase().includes(keyword)
       );
     })
     .map((item) => {
@@ -193,7 +194,8 @@ const columns = [
     label: 'RRP',
     align: 'right',
     field: (row) =>
-      new Intl.NumberFormat().format(row.item.properties?.rrp) ?? 'Unknown',
+      (new Intl.NumberFormat().format(row.item.properties?.rrp) ?? 'Unknown')
+      + (' ' + (row.item.properties?.currency ?? '')),
     format: (val) => `${val}`,
     sortable: true,
   },
