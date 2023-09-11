@@ -61,6 +61,7 @@
               <div>
                 <strong>Recommended Retail Price:</strong>
                 {{ tagd?.item?.properties.rrp ?? 'Unknown' }}
+                {{ tagd?.item?.properties.currency ?? '' }}
               </div>
             </q-card-section>
           </q-card>
