@@ -72,10 +72,6 @@
               <div class="text-h6">Transaction</div>
               <div class="text-subtitle2">ID {{ tagd?.meta?.transaction }}</div>
               <div class="text-subtitle2">
-                Price {{ tagd?.meta?.price?.amount }}
-                {{ tagd?.meta?.price?.currency }}
-              </div>
-              <div class="text-subtitle2">
                 sold to {{ tagd?.consumer?.email }}
               </div>
               <div class="text-subtitle2">
@@ -83,16 +79,16 @@
                 {{ date.formatDate(tagd?.createdAt, 'MMMM Do, YYYY HH:mm:ss') }}
               </div>
               <div v-if="tagd?.meta?.price">
-              <div class="text-subtitle2">
-                Price: {{ tagd.meta.price.amount }}
-                {{ tagd.meta.price.currency }}
-              </div>
             </div>
             <div v-else>Price Not available</div>
             <div v-if="tagd?.meta?.location">
               <div class="text-subtitle2">
                 Location: {{ tagd.meta.location.city }},
                 {{ findCountryByCode(tagd.meta.location.country)?.label }}
+              </div>
+              <div class="text-subtitle2">
+                Price: {{ tagd?.meta?.price?.amount }}
+                {{ tagd?.meta?.price?.currency }}
               </div>
             </div>
             <div v-else>Location Not available</div>
