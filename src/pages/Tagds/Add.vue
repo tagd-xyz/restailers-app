@@ -227,6 +227,18 @@ function onStockChange() {
   };
 }
 
+watch(stock, () => {
+  if (stock.value) {
+    const stockCurrency = stock.value.value.properties?.currency ?? 'GBP';
+    if (stockCurrency) {
+      const currency = currencies.value.find((currency) => {
+        return currency.value === stockCurrency;
+      });
+      data.value.currency = currency;
+    }
+  }
+});
+
 watch(currencies, () => {
   const currency = currencies.value.find((currency) => {
     return currency.value === 'GBP';
