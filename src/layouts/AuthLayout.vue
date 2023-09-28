@@ -6,6 +6,4 @@
   </q-layout>
 </template>
 
-<script setup>
-//empty
-</script>
+<script setup></script>
