@@ -9,7 +9,7 @@
         <div class="col">
           <q-card flat>
             <q-card-section>
-              <div class="text-subtitle2">ID {{ stock?.id }}</div>
+              <div class="text-subtitle2">Digital ID {{ stock?.id }}</div>
               <div class="text-subtitle2">
                 from Retailer {{ stock?.retailer ?? 'Unknown' }}
               </div>

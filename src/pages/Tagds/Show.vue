@@ -70,7 +70,7 @@
           <q-card>
             <q-card-section>
               <div class="text-h6">Transaction</div>
-              <div class="text-subtitle2">ID {{ tagd?.meta?.transaction }}</div>
+              <div class="text-subtitle2">Transaction ID {{ tagd?.meta?.transaction }}</div>
               <div class="text-subtitle2">
                 sold to {{ tagd?.consumer?.email }}
               </div>
