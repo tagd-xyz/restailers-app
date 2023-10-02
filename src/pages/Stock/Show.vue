@@ -15,10 +15,7 @@
               </div>
               <q-separator class="q-my-sm" />
               <strong>Description:</strong>
-              <div
-                class="text"
-                v-html="stock?.description.replace(/(?:\r\n|\r|\n)/g, '<br />')"
-              />
+              <div class="text" v-html="stock?.description.replace(/(?:\r\n|\r|\n)/g, '<br />')" />
             </q-card-section>
           </q-card>
 
@@ -67,13 +64,8 @@
           <img :src="image.thumbnail" />
         </div>
         <div class="col-2">
-          <files-upload
-            :stockId="stockId"
-            :images="stock?.images"
-            @uploaded="onUpload"
-            :disable="isFetching"
-            ref="uploader"
-          />
+          <files-upload :stockId="stockId" :images="stock?.images" @uploaded="onUpload" :disable="isFetching"
+            ref="uploader" />
         </div>
       </div>
 
@@ -81,21 +73,9 @@
 
       <div class="column items-end">
         <div class="col q-gutter-sm">
-          <q-btn
-            label="Update"
-            type="button"
-            color="secondary"
-            :loading="isUpdating"
-            :disable="!isFilesPending"
-            @click="onUpdateClick"
-          />
-          <q-btn
-            label="Delete"
-            type="button"
-            color="negative"
-            :loading="isDeleting"
-            @click="onDeleteClick"
-          />
+          <q-btn label="Update" type="button" color="secondary" :loading="isUpdating" :disable="!isFilesPending"
+            @click="onUpdateClick" />
+          <q-btn label="Delete" type="button" color="negative" :loading="isDeleting" @click="onDeleteClick" />
         </div>
       </div>
     </div>

@@ -1,25 +1,12 @@
 <template>
-  <q-table
-    class="q-pa-lg"
-    :loading="isLoading"
-    :rows="list"
-    :columns="columns"
-    row-key="name"
-    :pagination="{
-      sortBy: 'desc',
-      descending: false,
-      page: 1,
-      rowsPerPage: 50,
-    }"
-  >
+  <q-table class="q-pa-lg" :loading="isLoading" :rows="list" :columns="columns" row-key="name" :pagination="{
+    sortBy: 'desc',
+    descending: false,
+    page: 1,
+    rowsPerPage: 50,
+  }">
     <template v-slot:top-right>
-      <q-input
-        borderless
-        dense
-        debounce="300"
-        v-model="filter"
-        placeholder="Search"
-      >
+      <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
         <template v-slot:append>
           <q-icon name="search" />
         </template>
@@ -28,13 +15,8 @@
     <template v-slot:body="props">
       <q-tr @click="onRowClicked(props.row)">
         <q-td v-for="col in props.cols" :key="col.name" :props="props">
-          <q-img
-            v-if="col.name == 'thumbnail'"
-            :src="col.value"
-            spinner-color="white"
-            style="height: 2rem; max-width: 2rem"
-            fit="cover"
-          />
+          <q-img v-if="col.name == 'thumbnail'" :src="col.value" spinner-color="white"
+            style="height: 2rem; max-width: 2rem" fit="cover" />
           <span v-else>
             {{ col.value }}
           </span>

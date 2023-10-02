@@ -4,87 +4,41 @@
       <div class="row q-col-gutter-lg">
         <div class="col">
           <p class="text-h5">Item Details</p>
-          <q-select
-            v-model="stock"
-            :options="stockAvailable"
-            label="Item to be sold"
-            hint="Select an item from stock"
-            @update:model-value="onStockChange"
-            :loading="isStockLoading"
-          />
+          <q-select v-model="stock" :options="stockAvailable" label="Item to be sold" hint="Select an item from stock"
+            @update:model-value="onStockChange" :loading="isStockLoading" />
 
-          <q-input
-            v-model="data.serialNumber"
-            label="Serial Number"
-            hint="Enter the serial"
-            placeholder="i.e. 99c95a90-9629-4a5f-8191-a76077714030"
-            :disable="isPosting"
-          />
+          <q-input v-model="data.serialNumber" label="Serial Number" hint="Enter the serial"
+            placeholder="i.e. 99c95a90-9629-4a5f-8191-a76077714030" :disable="isPosting" />
 
           <q-separator class="q-my-lg" />
 
           <p class="text-h5">Sales details</p>
-          <q-input
-            v-model="data.consumer"
-            label="Consumer"
-            hint="Enter the email of the consumer"
-            placeholder="i.e. john@gmail.com"
-            :rules="[
+          <q-input v-model="data.consumer" label="Consumer" hint="Enter the email of the consumer"
+            placeholder="i.e. john@gmail.com" :rules="[
               (val) => (val && val.length > 0) || 'This field is required',
               (val) =>
                 val.match(
                   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
                 ) || 'Please write a valid email address',
-            ]"
-            :disable="isPosting"
-          />
+            ]" :disable="isPosting" />
 
-          <q-select
-            v-model="data.country"
-            :options="countries"
-            label="Country"
-            hint="Select a country from list"
-            :loading="isPosting"
-          />
+          <q-select v-model="data.country" :options="countries" label="Country" hint="Select a country from list"
+            :loading="isPosting" />
 
-          <q-input
-            v-model="data.city"
-            label="City"
-            hint="Enter the city"
-            placeholder="London"
-            :rules="[
+          <q-input v-model="data.city" label="City" hint="Enter the city" placeholder="London" :rules="[
+            (val) => (val && val.length > 0) || 'This field is required',
+          ]" :disable="isPosting" />
+
+          <q-select v-model="data.currency" :options="currencies" label="Currency" hint="Select a currency from list"
+            :loading="isPosting" />
+
+          <q-input v-model.number="data.amount" label="Amount" hint="Enter the amount" placeholder="i.e. 150"
+            :rules="[(val) => (val && val > 0) || 'This field is required']" :disable="isPosting" />
+
+          <q-input v-model="data.transaction" label="Transaction ID" hint="Enter the transaction ID"
+            placeholder="i.e. 4926687623010" :rules="[
               (val) => (val && val.length > 0) || 'This field is required',
-            ]"
-            :disable="isPosting"
-          />
-
-          <q-select
-            v-model="data.currency"
-            :options="currencies"
-            label="Currency"
-            hint="Select a currency from list"
-            :loading="isPosting"
-          />
-
-          <q-input
-            v-model.number="data.amount"
-            label="Amount"
-            hint="Enter the amount"
-            placeholder="i.e. 150"
-            :rules="[(val) => (val && val > 0) || 'This field is required']"
-            :disable="isPosting"
-          />
-
-          <q-input
-            v-model="data.transaction"
-            label="Transaction ID"
-            hint="Enter the transaction ID"
-            placeholder="i.e. 4926687623010"
-            :rules="[
-              (val) => (val && val.length > 0) || 'This field is required',
-            ]"
-            :disable="isPosting"
-          />
+            ]" :disable="isPosting" />
         </div>
       </div>
 
@@ -92,13 +46,7 @@
 
       <div class="column items-end">
         <div class="col">
-          <q-btn
-            label="Submit"
-            type="submit"
-            color="primary"
-            :loading="isPosting"
-            :disabled="!isSubmitEnabled"
-          />
+          <q-btn label="Submit" type="submit" color="primary" :loading="isPosting" :disabled="!isSubmitEnabled" />
         </div>
       </div>
     </q-form>

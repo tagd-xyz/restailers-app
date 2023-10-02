@@ -17,12 +17,8 @@
                 sold by {{ tagd?.item?.retailer ?? 'Unknown' }}
               </div>
               <q-separator class="q-my-md" />
-              <div
-                class="text"
-                v-html="
-                  tagd?.item?.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
-                "
-              />
+              <div class="text" v-html="tagd?.item?.description.replace(/(?:\r\n|\r|\n)/g, '<br />')
+                " />
             </q-card-section>
           </q-card>
 
@@ -79,19 +75,19 @@
                 {{ date.formatDate(tagd?.createdAt, 'MMMM Do, YYYY HH:mm:ss') }}
               </div>
               <div v-if="tagd?.meta?.price">
-            </div>
-            <div v-else>Price Not available</div>
-            <div v-if="tagd?.meta?.location">
-              <div class="text-subtitle2">
-                Location: {{ tagd.meta.location.city }},
-                {{ findCountryByCode(tagd.meta.location.country)?.label }}
               </div>
-              <div class="text-subtitle2">
-                Price: {{ tagd?.meta?.price?.amount }}
-                {{ tagd?.meta?.price?.currency }}
+              <div v-else>Price Not available</div>
+              <div v-if="tagd?.meta?.location">
+                <div class="text-subtitle2">
+                  Location: {{ tagd.meta.location.city }},
+                  {{ findCountryByCode(tagd.meta.location.country)?.label }}
+                </div>
+                <div class="text-subtitle2">
+                  Price: {{ tagd?.meta?.price?.amount }}
+                  {{ tagd?.meta?.price?.currency }}
+                </div>
               </div>
-            </div>
-            <div v-else>Location Not available</div>
+              <div v-else>Location Not available</div>
             </q-card-section>
           </q-card>
 
@@ -99,11 +95,7 @@
             <q-card-section>
               <div class="text-h6">Images</div>
               <div class="row">
-                <div
-                  class="col-1"
-                  v-for="image in tagd?.item?.images"
-                  :key="image.id"
-                >
+                <div class="col-1" v-for="image in tagd?.item?.images" :key="image.id">
                   <img :src="image.thumbnail" />
                 </div>
               </div>
@@ -116,40 +108,14 @@
 
       <div class="column items-end">
         <div class="col q-gutter-sm">
-          <q-btn
-            v-if="!isActivateEnabled"
-            label="Deactivate"
-            type="button"
-            color="warning"
-            :loading="isDeactivating"
-            :disabled="!isDeactivateEnabled"
-            @click="onDeactivateClicked"
-          />
-          <q-btn
-            v-else
-            label="Activate"
-            type="button"
-            color="warning"
-            :loading="isActivating"
-            :disabled="!isActivateEnabled"
-            @click="onActivateClicked"
-          />
-          <q-btn
-            label="Return"
-            type="button"
-            color="warning"
-            :loading="isReturning"
-            :disabled="!isReturnEnabled"
-            @click="onReturnClicked"
-          />
-          <q-btn
-            label="Delete"
-            type="button"
-            color="negative"
-            :loading="isDeleting"
-            :disabled="!isDeleteEnabled"
-            @click="onDeleteClicked"
-          />
+          <q-btn v-if="!isActivateEnabled" label="Deactivate" type="button" color="warning" :loading="isDeactivating"
+            :disabled="!isDeactivateEnabled" @click="onDeactivateClicked" />
+          <q-btn v-else label="Activate" type="button" color="warning" :loading="isActivating"
+            :disabled="!isActivateEnabled" @click="onActivateClicked" />
+          <q-btn label="Return" type="button" color="warning" :loading="isReturning" :disabled="!isReturnEnabled"
+            @click="onReturnClicked" />
+          <q-btn label="Delete" type="button" color="negative" :loading="isDeleting" :disabled="!isDeleteEnabled"
+            @click="onDeleteClicked" />
         </div>
       </div>
     </div>

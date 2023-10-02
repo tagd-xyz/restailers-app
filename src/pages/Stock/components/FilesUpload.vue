@@ -1,19 +1,7 @@
 <template>
   <div>
-    <q-uploader
-      :disable="disable"
-      flat
-      no-thumbnails
-      color="grey-7"
-      class="full-width"
-      method="PUT"
-      label="Upload images"
-      :sendRaw="true"
-      @failed="onUploadFail"
-      @uploaded="onUploadSuccess"
-      :factory="factoryFn"
-      ref="uploader"
-    />
+    <q-uploader :disable="disable" flat no-thumbnails color="grey-7" class="full-width" method="PUT" label="Upload images"
+      :sendRaw="true" @failed="onUploadFail" @uploaded="onUploadSuccess" :factory="factoryFn" ref="uploader" />
 
     <p class="text-negative">
       {{ errorMessage }}

@@ -5,26 +5,14 @@
       <q-spinner v-if="isFetching" color="black" />
     </p>
     <q-form @submit.prevent="onSubmit">
-      <q-input
-        v-model="data.name"
-        label="Name"
-        hint="Enter the name of the retailer"
-        placeholder="i.e. eBay"
-        :rules="[(val) => (val && val.length > 0) || 'This field is required']"
-        :disable="isFetching"
-      />
+      <q-input v-model="data.name" label="Name" hint="Enter the name of the retailer" placeholder="i.e. eBay"
+        :rules="[(val) => (val && val.length > 0) || 'This field is required']" :disable="isFetching" />
 
       <q-separator color="primary" class="q-my-md" />
 
       <div class="column items-end">
         <div class="col">
-          <q-btn
-            label="Update"
-            type="submit"
-            color="primary"
-            :loading="isFetching"
-            :disabled="!isSubmitEnabled"
-          />
+          <q-btn label="Update" type="submit" color="primary" :loading="isFetching" :disabled="!isSubmitEnabled" />
         </div>
       </div>
     </q-form>
